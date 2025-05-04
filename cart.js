@@ -1,119 +1,140 @@
-document.addEventListener('DOMContentLoaded', () => {
-    // Ініціалізація кошика
-    let cart = JSON.parse(localStorage.getItem('cart')) || [];
-    
-    // Елементи DOM
-    const cartItems = document.getElementById('cart-items');
-    const totalAmount = document.getElementById('total-amount');
-    const cartCount = document.getElementById('cart-count');
-    const checkoutBtn = document.getElementById('checkout-btn');
+// Отримуємо поточний кошик з localStorage або створюємо новий
+function getCart() {
+    const cart = localStorage.getItem('pizzaCart');
+    return cart ? JSON.parse(cart) : [];
+}
 
-    // Відображення кошика
-    function renderCart() {
-        cartItems.innerHTML = '';
-        let total = 0;
+// Зберігаємо кошик у localStorage
+function saveCart(cart) {
+    localStorage.setItem('pizzaCart', JSON.stringify(cart));
+    updateCartCount();
+}
 
-        cart.forEach((item, index) => {
-            total += item.price * item.quantity;
-            const itemElement = document.createElement('div');
-            itemElement.className = 'cart-item';
-            itemElement.innerHTML = `
-                <img src="${item.image}" alt="${item.name}">
-                <div class="item-info">
-                    <h3>${item.name}</h3>
-                    <div class="item-controls">
-                        <button class="quantity-minus">-</button>
-                        <span>${item.quantity}</span>
-                        <button class="quantity-plus">+</button>
-                        <span class="item-price">${item.price * item.quantity} грн</span>
-                        <button class="remove-btn">×</button>
-                    </div>
-                </div>
-            `;
-            
-            // Додавання обробників подій
-            itemElement.querySelector('.quantity-minus').addEventListener('click', () => updateQuantity(index, -1));
-            itemElement.querySelector('.quantity-plus').addEventListener('click', () => updateQuantity(index, 1));
-            itemElement.querySelector('.remove-btn').addEventListener('click', () => removeItem(index));
-            
-            cartItems.appendChild(itemElement);
-        });
-
-        totalAmount.textContent = total;
-        cartCount.textContent = cart.reduce((sum, item) => sum + item.quantity, 0);
-        updateCartCounter();
-    }
-
-    // Оновлення кількості
-    function updateQuantity(index, delta) {
-        cart[index].quantity += delta;
-        if(cart[index].quantity < 1) cart.splice(index, 1);
-        saveCart();
-        renderCart();
-    }
-
-    // Видалення товару
-    function removeItem(index) {
-        cart.splice(index, 1);
-        saveCart();
-        renderCart();
-    }
-
-    // Оновлення лічильника в хедері
-    function updateCartCounter() {
-        const cartCounters = document.querySelectorAll('#cart-count');
-        cartCounters.forEach(counter => {
-            counter.textContent = cart.reduce((sum, item) => sum + item.quantity, 0);
-        });
-    }
-
-    // Збереження в localStorage
-    function saveCart() {
-        localStorage.setItem('cart', JSON.stringify(cart));
-        updateCartCounter();
-    }
-
-    // Оформлення замовлення
-    checkoutBtn.addEventListener('click', () => {
-        if(cart.length === 0) {
-            alert('Кошик порожній!');
-            return;
-        }
-        alert('Замовлення оформлено! Очікуйте дзвінка.');
-        localStorage.removeItem('cart');
-        cart = [];
-        renderCart();
+// Оновлюємо лічильник товарів у кошику
+function updateCartCount() {
+    const cart = getCart();
+    const totalCount = cart.reduce((sum, item) => sum + item.quantity, 0);
+    document.querySelectorAll('#cart-count').forEach(el => {
+        el.textContent = totalCount;
     });
+}
 
-    // Початковий рендер
-    renderCart();
-});
+// Додаємо товар до кошика
+function addToCart(productId, productName, productPrice) {
+    const cart = getCart();
+    const existingItem = cart.find(item => item.id === productId);
 
-// Функція для додавання товару в кошик
-export function addToCart(pizza) {
-    const existingItem = cart.find(item => item.id === pizza.id);
-    if(existingItem) {
-        existingItem.quantity++;
+    if (existingItem) {
+        existingItem.quantity += 1;
     } else {
-        cart.push(pizza);
+        cart.push({
+            id: productId,
+            name: productName,
+            price: productPrice,
+            quantity: 1
+        });
     }
-    saveCart();
-    renderCart();
+
+    saveCart(cart);
+    alert(`${productName} додано до кошика!`);
 }
 
-// Ініціалізація кнопок додавання в кошик
-export function initAddToCartButtons() {
+// Видаляємо товар з кошика
+function removeFromCart(productId) {
+    const cart = getCart();
+    const updatedCart = cart.filter(item => item.id !== productId);
+    saveCart(updatedCart);
+    renderCartItems();
+}
+
+// Змінюємо кількість товару
+function updateQuantity(productId, newQuantity) {
+    if (newQuantity < 1) return;
+
+    const cart = getCart();
+    const item = cart.find(item => item.id === productId);
+
+    if (item) {
+        item.quantity = newQuantity;
+        saveCart(cart);
+        renderCartItems();
+    }
+}
+
+// Відображаємо товари у кошику
+function renderCartItems() {
+    const cartItemsContainer = document.getElementById('cart-items');
+    if (!cartItemsContainer) return;
+
+    const cart = getCart();
+    let total = 0;
+
+    if (cart.length === 0) {
+        cartItemsContainer.innerHTML = '<p class="empty-cart">Ваш кошик порожній</p>';
+        document.getElementById('total-amount').textContent = '0';
+        return;
+    }
+
+    cartItemsContainer.innerHTML = cart.map(item => {
+        total += item.price * item.quantity;
+        return `
+            <div class="cart-item">
+                <div class="item-info">
+                    <h4>${item.name}</h4>
+                    <p>${item.price} грн × ${item.quantity}</p>
+                </div>
+                <div class="item-controls">
+                    <button class="quantity-btn minus" onclick="updateQuantity(${item.id}, ${item.quantity - 1})">-</button>
+                    <span class="quantity">${item.quantity}</span>
+                    <button class="quantity-btn plus" onclick="updateQuantity(${item.id}, ${item.quantity + 1})">+</button>
+                    <button class="remove-btn" onclick="removeFromCart(${item.id})"><i class="fas fa-trash"></i></button>
+                </div>
+                <div class="item-total">${item.price * item.quantity} грн</div>
+            </div>
+        `;
+    }).join('');
+
+    document.getElementById('total-amount').textContent = total;
+}
+
+// Обробка кнопки оформлення замовлення
+function setupCheckoutButton() {
+    const checkoutBtn = document.getElementById('checkout-btn');
+    if (checkoutBtn) {
+        checkoutBtn.addEventListener('click', () => {
+            const cart = getCart();
+            if (cart.length === 0) {
+                alert('Ваш кошик порожній!');
+                return;
+            }
+
+            // Тут можна додати логіку оформлення замовлення
+            alert('Замовлення оформлено! Дякуємо за покупку!');
+            localStorage.removeItem('pizzaCart');
+            updateCartCount();
+            renderCartItems();
+        });
+    }
+}
+
+// Ініціалізація подій для кнопок "Додати в кошик"
+function setupAddToCartButtons() {
     document.querySelectorAll('.order-button').forEach(button => {
-        button.addEventListener('click', (e) => {
-            const pizzaCard = e.target.closest('.pizza-card');
-            const pizza = {
-                id: pizzaCard.dataset.id,
-                name: pizzaCard.dataset.name,
-                price: parseInt(pizzaCard.dataset.price),
-                image: pizzaCard.querySelector('img').src,
-                quantity: 1
-            };
-            addToCart(pizza);
+        button.addEventListener('click', function() {
+            const pizzaCard = this.closest('.pizza-card');
+            const id = parseInt(pizzaCard.getAttribute('data-id'));
+            const name = pizzaCard.getAttribute('data-name');
+            const price = parseInt(pizzaCard.getAttribute('data-price'));
+            
+            addToCart(id, name, price);
         });
     });
 }
+
+// Ініціалізація всіх функцій при завантаженні сторінки
+document.addEventListener('DOMContentLoaded', function() {
+    updateCartCount();
+    renderCartItems();
+    setupAddToCartButtons();
+    setupCheckoutButton();
+});
