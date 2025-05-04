@@ -15,6 +15,7 @@
                 <li><a href="index.html"><i class="fas fa-home"></i> Головна</a></li>
                 <li><a href="menu.html"><i class="fas fa-pizza-slice"></i> Меню</a></li>
                 <li><a href="policy.html"><i class="fas fa-user-shield"></i> Політика</a></li>
+                <li class="cart-icon"><a href="#"><i class="fas fa-shopping-cart"></i> (<span id="cart-count">0</span>)</a></li>
             </ul>
         </nav>
     </header>
@@ -23,26 +24,98 @@
         <h1 class="menu-title">Наше меню</h1>
         
         <div class="pizza-menu">
-            <!-- Маргарита -->
-            <div class="pizza-card">
-                <img src="https://images.unsplash.com/photo-1574071318508-1cdbab80d002?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" 
-                     alt="Піца Маргарита" 
-                     loading="lazy">
+            <!-- Список піц -->
+            <div class="pizza-card" data-id="1" data-name="Маргарита" data-price="169">
+                <img src="https://images.unsplash.com/photo-1574071318508-1cdbab80d002" alt="Маргарита">
                 <h3>Маргарита</h3>
-                <p>Класична італійська піца з свіжими томатами та моцарелою</p>
+                <p>Класична з томатами, моцарелою та базиліком</p>
                 <span class="price">169 грн</span>
-                <button class="order-button">В кошик 🛒</button>
+                <button class="order-button">Додати в кошик</button>
             </div>
 
-            <!-- Пепероні -->
-            <div class="pizza-card">
-                <img src="https://images.unsplash.com/photo-1588315029754-2dd089d39a1a?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" 
-                     alt="Піца Пепероні" 
-                     loading="lazy">
-                <h3>Гостра Пепероні 🌶️</h3>
-                <p>З ковбаскою пепероні, моцарелою та соусом чилі</p>
+            <div class="pizza-card" data-id="2" data-name="Пепероні" data-price="189">
+                <img src="https://images.unsplash.com/photo-1588315029754-2dd089d39a1a" alt="Пепероні">
+                <h3>Пепероні 🌶️</h3>
+                <p>Гостра піца з ковбаскою пепероні</p>
                 <span class="price">189 грн</span>
-                <button class="order-button">В кошик 🛒</button>
+                <button class="order-button">Додати в кошик</button>
+            </div>
+
+            <div class="pizza-card" data-id="3" data-name="Гавайська" data-price="179">
+                <img src="https://images.unsplash.com/photo-1601924582970-9238bcb495d9" alt="Гавайська">
+                <h3>Гавайська 🍍</h3>
+                <p>Курка, ананас, моцарела</p>
+                <span class="price">179 грн</span>
+                <button class="order-button">Додати в кошик</button>
+            </div>
+
+            <!-- Додайте інші 7 піц аналогічно -->
+            <div class="pizza-card" data-id="4" data-name="BBQ" data-price="199">
+                <img src="https://images.unsplash.com/photo-1595854341625-f33ee10dbf94" alt="BBQ">
+                <h3>BBQ Курка</h3>
+                <p>Курка, цибуля, соус BBQ</p>
+                <span class="price">199 грн</span>
+                <button class="order-button">Додати в кошик</button>
+            </div>
+
+            <div class="pizza-card" data-id="5" data-name="Вегетаріанська" data-price="175">
+                <img src="https://images.unsplash.com/photo-1593560708920-61dd98c46a4e" alt="Вегетаріанська">
+                <h3>Вегетаріанська 🥦</h3>
+                <p>Сезонні овочі, сир</p>
+                <span class="price">175 грн</span>
+                <button class="order-button">Додати в кошик</button>
+            </div>
+
+            <div class="pizza-card" data-id="6" data-name="М'ясна" data-price="209">
+                <img src="https://images.unsplash.com/photo-1604382354936-07c5d9983bd3" alt="М'ясна">
+                <h3>М'ясна 🥩</h3>
+                <p>Бекон, шинка, пепероні</p>
+                <span class="price">209 грн</span>
+                <button class="order-button">Додати в кошик</button>
+            </div>
+
+            <div class="pizza-card" data-id="7" data-name="4 сири" data-price="189">
+                <img src="https://images.unsplash.com/photo-1590947132387-155cc02f3212" alt="4 сири">
+                <h3>4 Сири 🧀</h3>
+                <p>Моцарела, горгонзола, пармезан, чедер</p>
+                <span class="price">189 грн</span>
+                <button class="order-button">Додати в кошик</button>
+            </div>
+
+            <div class="pizza-card" data-id="8" data-name="Морська" data-price="219">
+                <img src="https://images.unsplash.com/photo-1571997478779-2adcbbe9ab2f" alt="Морська">
+                <h3>Морська 🦑</h3>
+                <p>Креветки, мідії, кальмари</p>
+                <span class="price">219 грн</span>
+                <button class="order-button">Додати в кошик</button>
+            </div>
+
+            <div class="pizza-card" data-id="9" data-name="Грибна" data-price="179">
+                <img src="https://images.unsplash.com/photo-1613564834361-9436948817d1" alt="Грибна">
+                <h3>Грибна 🍄</h3>
+                <p>Шампіньйони, трюфельна олія</p>
+                <span class="price">179 грн</span>
+                <button class="order-button">Додати в кошик</button>
+            </div>
+
+            <div class="pizza-card" data-id="10" data-name="Діабло" data-price="199">
+                <img src="https://images.unsplash.com/photo-1628840042765-356cda07504e" alt="Діабло">
+                <h3>Діабло 🌶️🔥</h3>
+                <p>Подвійна гострий соус, халапеньйо</p>
+                <span class="price">199 грн</span>
+                <button class="order-button">Додати в кошик</button>
+            </div>
+        </div>
+
+        <!-- Кошик -->
+        <div class="cart-modal" id="cart">
+            <div class="cart-content">
+                <h2>Ваше замовлення (<span id="cart-total-count">0</span>)</h2>
+                <div class="cart-items" id="cart-items"></div>
+                <div class="cart-total">
+                    Загальна сума: <span id="cart-total-price">0</span> грн
+                </div>
+                <button class="checkout-button">Оформити замовлення</button>
             </div>
         </div>
     </main>
@@ -50,8 +123,9 @@
     <footer>
         <div class="footer-content">
             <p>⏰ Години роботи: 10:00 - 23:00 щодня</p>
-            <p>© 2024 Pizza Napoli. Всі права захищені</p>
+            <p>© 2025 Pizza Napoli. Всі права захищені</p>
         </div>
     </footer>
+    <script src="cart.js"></script>
 </body>
 </html>

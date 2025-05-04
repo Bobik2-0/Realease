@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Кошик - Pizza Napoli</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Roboto+Condensed:wght@700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <nav>
+            <ul>
+                <li><a href="index.html"><i class="fas fa-home"></i> Головна</a></li>
+                <li><a href="menu.html"><i class="fas fa-pizza-slice"></i> Меню</a></li>
+                <li><a href="policy.html"><i class="fas fa-user-shield"></i> Політика</a></li>
+                <li class="cart-icon"><a href="shoppingcart.html"><i class="fas fa-shopping-cart"></i> (<span id="cart-count">0</span>)</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="cart-main">
+        <h1 class="cart-title">Ваш кошик</h1>
+        
+        <div class="cart-items" id="cart-items"></div>
+        
+        <div class="cart-summary">
+            <div class="total-price">
+                Загальна сума: <span id="total-amount">0</span> грн
+            </div>
+            <button class="checkout-btn" id="checkout-btn">Оформити замовлення</button>
+        </div>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <p>⏰ Години роботи: 10:00 - 23:00 щодня</p>
+            <p>© 2025 Pizza Napoli. Всі права захищені</p>
+        </div>
+    </footer>
+
+    <script src="cart.js"></script>
+</body>
+</html>
